@@ -2,7 +2,7 @@ const User = require("../models/user.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const PQueue = require("p-queue").default;
-const { generateTokenAndSetCookie } = require("../utils/generateTokenandSetCookie");
+const { generateTokenandSetCookie } = require("../utils/generateTokenandSetCookie");
 
 const queue = new PQueue({ concurrency: 1 });
 
@@ -30,7 +30,7 @@ const registerUser = async (req, res) => {
       });
 
       await newUser.save();
-      const accessToken = generateTokenAndSetCookie(newUser._id, res);
+      const accessToken = generateTokenandSetCookie(newUser._id, res);
 
       res.status(201).json({ ...newUser._doc, message: "User created successfully", token: accessToken });
     } catch (error) {
@@ -53,7 +53,7 @@ const loginUser = async (req, res) => {
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) return res.status(401).json({ message: "Invalid email or password" });
 
-      const accessToken = generateTokenAndSetCookie(user._id, res);
+      const accessToken = generateTokenandSetCookie(user._id, res);
 
       res.json({ ...user._doc, token: accessToken });
     } catch (error) {
@@ -105,7 +105,7 @@ const updateUserProfile = async (req, res) => {
       if (req.file?.path) user.profileImageUrl = req.file.path;
 
       const updatedUser = await user.save();
-      const accessToken = generateTokenAndSetCookie(updatedUser._id, res);
+      const accessToken = generateTokenandSetCookie(updatedUser._id, res);
 
       res.json({ ...updatedUser._doc, token: accessToken });
     } catch (error) {
