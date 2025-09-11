@@ -7,6 +7,7 @@ const authRoutes = require("./routes/auth.routes");
 const UserRoutes = require("./routes/user.routes");
 const taskRoutes = require("./routes/task.routes");
 const ReportRoutes = require("./routes/report.routes");
+const cookieParser = require("cookie-parser");
 
 const app = express();
 
@@ -20,26 +21,19 @@ app.use(
   })
 );
 
-
-
-
-
 //Connect DataBase
 connectDB();
-
 
 //Middleware to parse JSON bodies
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-
-
+app.use(cookieParser());
 
 //Routes
 app.use("/api/v1/auth", authRoutes);
-app.use("api/v1/report",  ReportRoutes);
+app.use("api/v1/report", ReportRoutes);
 app.use("/api/v1/tasks", taskRoutes);
-app.use("/api/v1/users",UserRoutes);
+app.use("/api/v1/users", UserRoutes);
 
 //Start Server
 const PORT = process.env.PORT || 5555;
