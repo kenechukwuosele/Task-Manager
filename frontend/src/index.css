@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Roboto", "sans-serif";
+  --breakpoint-3xl: 1920px;
+  --color-primary: #1368ec;
+}
+
+@layer base {
+  html {
+    font-family: var(--font-display);
+  }
+
+  body {
+    background-color: #fcfbfc;
+    overflow-x: hidden;
+  }
+
+  .input-box {
+    @apply w-full flex justify-between gap-3 text-sm text-black 
+           bg-slate-100/50 rounded px-4 py-3 mb-4 mt-3 
+           border border-slate-200 outline-none;
+  }
+
+  @keyframes gradient {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+}
+
+@layer components {
+  .card {
+    @apply relative p-6 rounded-2xl bg-white 
+           shadow-lg hover:shadow-2xl 
+           transition-all duration-300;
+    position: relative;
+    overflow: hidden;
+  }
+}
