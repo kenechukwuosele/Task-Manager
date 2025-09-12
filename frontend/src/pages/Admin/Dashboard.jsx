@@ -19,9 +19,18 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
 
   const greetings = {
-    morning: { text: "Morning", gradient: "bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500" },
-    afternoon: { text: "Afternoon", gradient: "bg-gradient-to-r from-blue-400 via-indigo-500 to-purple-600" },
-    evening: { text: "Evening", gradient: "bg-gradient-to-r from-purple-500 via-pink-500 to-red-500" },
+    morning: {
+      text: "Morning",
+      gradient: "bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500",
+    },
+    afternoon: {
+      text: "Afternoon",
+      gradient: "bg-gradient-to-r from-blue-400 via-indigo-500 to-purple-600",
+    },
+    evening: {
+      text: "Evening",
+      gradient: "bg-gradient-to-r from-purple-500 via-pink-500 to-red-500",
+    },
   };
 
   const getGreeting = () => {
@@ -36,7 +45,9 @@ const Dashboard = () => {
   // Fetch dashboard safely
   const fetchDashboard = async () => {
     try {
-      const response = await axiosInstance.get(API_PATHS.TASKS.GET_DASHBOARD_DATA);
+      const response = await axiosInstance.get(
+        API_PATHS.TASKS.GET_DASHBOARD_DATA
+      );
       setDashboardData(response.data);
     } catch (error) {
       console.error("Error fetching dashboard data", error);
@@ -67,30 +78,42 @@ const Dashboard = () => {
     <DashboardLayout>
       <div className="card my-5">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold">
-            Good{" "}
-            <span
-              className={`${gradient} bg-clip-text text-transparent bg-[length:200%_200%]`}
-              style={{ animation: "gradient 6s ease infinite" }}
-            >
-              {text}
-            </span>{" "}
-            {user?.name}
-          </h1>
-          <p className="text-xs md:text-[13px] text-gray-400 mt-1.5">
-            {moment().format("dddd Do MMMM YYYY")}
-          </p>
+          <div className="col-span-3">
+            <h1 className="text-2xl md:text-3xl font-bold">
+              Good{" "}
+              <span
+                className={`${gradient} bg-clip-text text-transparent bg-[length:200%_200%]`}
+                style={{ animation: "gradient 6s ease infinite" }}
+              >
+                {text}
+              </span>{" "}
+              {user?.name}
+            </h1>
+            <p className="text-xs md:text-[13px] text-gray-400 mt-1.5">
+              {moment().format("dddd Do MMMM YYYY")}
+            </p>
+          </div>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mt-5">
           <InfoCard
-          icon={<IoMdCard/>}
-          label="Total Tasks"
-          value={addThousandSeparator(
-            dashboardData?.charts?.taskDistribution?.All || 0
-          )}
-          color="bg-primary"
+            icon={<IoMdCard />}
+            label="Total Tasks"
+            value={addThousandSeparator(
+              dashboardData?.charts?.taskDistribution?.All || 0
+            )}
+            color="bg-primary"
           />
+
+           <InfoCard
+            icon={<IoMdCard />}
+            label="Pending Tasks"
+            value={addThousandSeparator(
+              dashboardData?.charts?.taskDistribution?.Pending || 0
+            )}
+            color="bg-violet-500"
+          />
+
         </div>
       </div>
     </DashboardLayout>
