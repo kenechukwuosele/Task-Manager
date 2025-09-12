@@ -47,7 +47,11 @@ axiosInstance.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const { data } = await axiosInstance.post(API_PATHS.AUTH.REFRESH);
+        const { data } = await axios.post(
+          API_PATHS.AUTH.REFRESH,
+          {},
+          { withCredentials: true } // cookie is sent
+        );
 
         const newAccessToken = data.accessToken;
         localStorage.setItem("accessToken", newAccessToken);

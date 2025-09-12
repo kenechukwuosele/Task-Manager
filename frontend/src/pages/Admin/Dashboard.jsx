@@ -45,13 +45,16 @@ const Dashboard = () => {
   // Fetch dashboard safely
   const fetchDashboard = async () => {
     try {
-      const response = await axiosInstance.get(
-        API_PATHS.TASKS.GET_DASHBOARD_DATA
-      );
+      const endpoint =
+        user?.role === "admin"
+          ? API_PATHS.TASKS.GET_DASHBOARD_DATA
+          : API_PATHS.TASKS.GET_USER_DASHBOARD_DATA;
+
+      const response = await axiosInstance.get(endpoint);
       setDashboardData(response.data);
     } catch (error) {
       console.error("Error fetching dashboard data", error);
-      if (error.response?.status === 401) navigate("/login"); // fallback
+      if (error.response?.status === 401) navigate("/login");
     } finally {
       setLoading(false);
     }
@@ -100,20 +103,45 @@ const Dashboard = () => {
             icon={<IoMdCard />}
             label="Total Tasks"
             value={addThousandSeparator(
-              dashboardData?.charts?.taskDistribution?.All || 0
+              dashboardData?.statistics?.totalTasks ||
+                dashboardData?.charts?.taskDistribution?.all ||
+                0
             )}
             color="bg-primary"
           />
 
-           <InfoCard
+          <InfoCard
             icon={<IoMdCard />}
             label="Pending Tasks"
             value={addThousandSeparator(
-              dashboardData?.charts?.taskDistribution?.Pending || 0
+              dashboardData?.statistics?.pendingTasks ||
+                dashboardData?.charts?.taskDistribution?.pending ||
+                0
             )}
             color="bg-violet-500"
           />
 
+          <InfoCard
+            icon={<IoMdCard />}
+            label="In-Progress Tasks"
+            value={addThousandSeparator(
+              dashboardData?.statistics?.inProgressTasks ||
+                dashboardData?.charts?.taskDistribution?.["in-progress"] ||
+                0
+            )}
+            color="bg-cyan-500"
+          />
+
+          <InfoCard
+            icon={<IoMdCard />}
+            label="Completed Tasks"
+            value={addThousandSeparator(
+              dashboardData?.statistics?.completedTasks ||
+                dashboardData?.charts?.taskDistribution?.completed ||
+                0
+            )}
+            color="bg-lime-500"
+          />
         </div>
       </div>
     </DashboardLayout>
