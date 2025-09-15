@@ -41,7 +41,7 @@ export const UserProvider = ({ children }) => {
         { withCredentials: true }
       );
     } catch (err) {
-      console.error("Logout failed:", err);
+      toast.error("Logout failed:", err);
     } finally {
       setUser(null);
       setAccessToken(null);

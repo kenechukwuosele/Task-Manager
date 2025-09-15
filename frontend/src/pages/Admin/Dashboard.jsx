@@ -1,8 +1,7 @@
-import React, { useEffect, useState, useContext } from "react";
-import { useUserAuth } from "../../hooks/useUserAuth";
-import { UserContext } from "../../context/userContext";
-import DashboardLayout from "../../components/Layouts/DashboardLayout";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useUserAuth } from "../../hooks/useUserAuth"; // Import useUserAuth
+import DashboardLayout from "../../components/Layouts/DashboardLayout";
 import { API_PATHS } from "../../utils/apiPaths";
 import axiosInstance from "../../utils/axiosinstance";
 import moment from "moment";
@@ -11,12 +10,13 @@ import InfoCard from "../../components/Cards/InfoCard";
 import { addThousandSeparator } from "../../utils/helper";
 import { LuArrowRight } from "react-icons/lu";
 import TaskListTable from "../../components/TaskListTable";
+import CustomPieChart from "../../components/Charts/CustomPieChart";
+
+const COLORS = ["#BD51FF", "#00B8DB", "#7BCE00"];
 
 const Dashboard = () => {
-  useUserAuth();
-  const { user } = useContext(UserContext);
+  const user = useUserAuth(); // Use the returned user from useUserAuth
   const navigate = useNavigate();
-
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -44,14 +44,12 @@ const Dashboard = () => {
 
   const { text, gradient } = getGreeting();
 
-  // Fetch dashboard safely
   const fetchDashboard = async () => {
     try {
       const endpoint =
         user?.role === "admin"
           ? API_PATHS.TASKS.GET_DASHBOARD_DATA
           : API_PATHS.TASKS.GET_USER_DASHBOARD_DATA;
-
       const response = await axiosInstance.get(endpoint);
       setDashboardData(response.data);
     } catch (error) {
@@ -62,26 +60,30 @@ const Dashboard = () => {
     }
   };
 
-  const onSeeMore  = async () => {
-    navigate('/admin/tasks')
-  }
+  const onSeeMore = () => {
+    navigate(user?.role === "admin" ? "/admin/tasks" : "/tasks");
+  };
 
-  // On mount: attempt refresh first
   useEffect(() => {
     const init = async () => {
       try {
-        await axiosInstance.post(API_PATHS.AUTH.REFRESH); // refresh access token if possible
+        await axiosInstance.post(API_PATHS.AUTH.REFRESH);
       } catch {
         // If refresh fails, axiosInstance will handle logout
       } finally {
-        fetchDashboard(); // only call dashboard after refresh attempt
+        fetchDashboard();
       }
     };
-
     init();
   }, []);
 
   if (loading) return <DashboardLayout>Loading...</DashboardLayout>;
+
+  const pieChartData = [
+    { name: "Pending", value: dashboardData?.statistics?.pendingTasks ?? 0 },
+    { name: "In Progress", value: dashboardData?.statistics?.inProgressTasks ?? 0 },
+    { name: "Completed", value: dashboardData?.statistics?.completedTasks ?? 0 },
+  ];
 
   return (
     <DashboardLayout>
@@ -103,65 +105,50 @@ const Dashboard = () => {
             </p>
           </div>
         </div>
-
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mt-5">
           <InfoCard
             icon={<IoMdCard />}
             label="Total Tasks"
-            value={addThousandSeparator(
-              dashboardData?.statistics?.totalTasks ||
-                dashboardData?.charts?.taskDistribution?.all ||
-                0
-            )}
+            value={addThousandSeparator(dashboardData?.statistics?.totalTasks ?? 0)}
             color="bg-primary"
           />
-
           <InfoCard
             icon={<IoMdCard />}
             label="Pending Tasks"
-            value={addThousandSeparator(
-              dashboardData?.statistics?.pendingTasks ||
-                dashboardData?.charts?.taskDistribution?.pending ||
-                0
-            )}
+            value={addThousandSeparator(dashboardData?.statistics?.pendingTasks ?? 0)}
             color="bg-violet-500"
           />
-
           <InfoCard
             icon={<IoMdCard />}
             label="In-Progress Tasks"
-            value={addThousandSeparator(
-              dashboardData?.statistics?.inProgressTasks ||
-                dashboardData?.charts?.taskDistribution?.["in-progress"] ||
-                0
-            )}
+            value={addThousandSeparator(dashboardData?.statistics?.inProgressTasks ?? 0)}
             color="bg-cyan-500"
           />
-
           <InfoCard
             icon={<IoMdCard />}
             label="Completed Tasks"
-            value={addThousandSeparator(
-              dashboardData?.statistics?.completedTasks ||
-                dashboardData?.charts?.taskDistribution?.completed ||
-                0
-            )}
+            value={addThousandSeparator(dashboardData?.statistics?.completedTasks ?? 0)}
             color="bg-lime-500"
           />
         </div>
       </div>
-
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-4 md:my-6">
+        <div>
+          <div className="card">
+            <div className="flex items-center justify-between">
+              <h5 className="font-medium">Task Distribution</h5>
+            </div>
+            <CustomPieChart data={pieChartData} colors={COLORS} />
+          </div>
+        </div>
         <div className="md:col-span-2">
           <div className="card">
             <div className="flex items-center justify-between">
               <h5 className="text-lg">Recent Tasks</h5>
-
               <button className="card-btn" onClick={onSeeMore}>
                 See All <LuArrowRight className="text-base" />
               </button>
             </div>
-
             <TaskListTable tableData={dashboardData?.recentTasks || []} />
           </div>
         </div>
