@@ -11,6 +11,8 @@ import { addThousandSeparator } from "../../utils/helper";
 import { LuArrowRight } from "react-icons/lu";
 import TaskListTable from "../../components/TaskListTable";
 import CustomPieChart from "../../components/Charts/CustomPieChart";
+import CustomBarChart from "../../components/Charts/CustomBarChart";
+import { BarChart } from "recharts";
 
 const COLORS = ["#BD51FF", "#00B8DB", "#7BCE00"];
 
@@ -81,8 +83,30 @@ const Dashboard = () => {
 
   const pieChartData = [
     { name: "Pending", value: dashboardData?.statistics?.pendingTasks ?? 0 },
-    { name: "In Progress", value: dashboardData?.statistics?.inProgressTasks ?? 0 },
-    { name: "Completed", value: dashboardData?.statistics?.completedTasks ?? 0 },
+    {
+      name: "In Progress",
+      value: dashboardData?.statistics?.inProgressTasks ?? 0,
+    },
+    {
+      name: "Completed",
+      value: dashboardData?.statistics?.completedTasks ?? 0,
+    },
+  ];
+
+  // Build bar chart data
+  const barChartData = [
+    {
+      priority: "Low",
+      count: dashboardData?.charts?.priorityDistribution?.low ?? 0,
+    },
+    {
+      priority: "Medium",
+      count: dashboardData?.charts?.priorityDistribution?.medium ?? 0,
+    },
+    {
+      priority: "High",
+      count: dashboardData?.charts?.priorityDistribution?.high ?? 0,
+    },
   ];
 
   return (
@@ -109,25 +133,33 @@ const Dashboard = () => {
           <InfoCard
             icon={<IoMdCard />}
             label="Total Tasks"
-            value={addThousandSeparator(dashboardData?.statistics?.totalTasks ?? 0)}
+            value={addThousandSeparator(
+              dashboardData?.statistics?.totalTasks ?? 0
+            )}
             color="bg-primary"
           />
           <InfoCard
             icon={<IoMdCard />}
             label="Pending Tasks"
-            value={addThousandSeparator(dashboardData?.statistics?.pendingTasks ?? 0)}
+            value={addThousandSeparator(
+              dashboardData?.statistics?.pendingTasks ?? 0
+            )}
             color="bg-violet-500"
           />
           <InfoCard
             icon={<IoMdCard />}
             label="In-Progress Tasks"
-            value={addThousandSeparator(dashboardData?.statistics?.inProgressTasks ?? 0)}
+            value={addThousandSeparator(
+              dashboardData?.statistics?.inProgressTasks ?? 0
+            )}
             color="bg-cyan-500"
           />
           <InfoCard
             icon={<IoMdCard />}
             label="Completed Tasks"
-            value={addThousandSeparator(dashboardData?.statistics?.completedTasks ?? 0)}
+            value={addThousandSeparator(
+              dashboardData?.statistics?.completedTasks ?? 0
+            )}
             color="bg-lime-500"
           />
         </div>
@@ -141,6 +173,16 @@ const Dashboard = () => {
             <CustomPieChart data={pieChartData} colors={COLORS} />
           </div>
         </div>
+
+        <div>
+          <div className="card">
+            <div className="flex items-center justify-between">
+              <h5 className="font-medium">Task Priority Levels</h5>
+            </div>
+            <CustomBarChart data={barChartData} />
+          </div>
+        </div>
+
         <div className="md:col-span-2">
           <div className="card">
             <div className="flex items-center justify-between">
