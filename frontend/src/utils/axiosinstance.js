@@ -2,7 +2,7 @@ import axios from "axios";
 import { API_PATHS } from "./apiPaths";
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:5555",
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5555",
   withCredentials: true, // send cookies (refresh token)
 });
 

@@ -1,5 +1,3 @@
-export const BASE_URL = "http://localhost:5555";
-
 //utils/apiPaths.js
 export const API_PATHS = {
   AUTH: {
