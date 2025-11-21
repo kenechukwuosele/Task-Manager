@@ -2,7 +2,7 @@ import axios from "axios";
 import { API_PATHS } from "./apiPaths";
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: "http://localhost:5555",
   withCredentials: true, // send cookies (refresh token)
 });
 
@@ -48,7 +48,7 @@ axiosInstance.interceptors.response.use(
 
       try {
         const { data } = await axios.post(
-          API_PATHS.AUTH.REFRESH,
+          `${axiosInstance.defaults.baseURL}${API_PATHS.AUTH.REFRESH}`,
           {},
           { withCredentials: true } // cookie is sent
         );

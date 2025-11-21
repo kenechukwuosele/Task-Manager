@@ -31,9 +31,11 @@ app.use(cookieParser());
 
 //Routes
 app.use("/api/v1/auth", authRoutes);
-app.use("api/v1/report", ReportRoutes);
+app.use("/api/v1/report", ReportRoutes);
 app.use("/api/v1/tasks", taskRoutes);
 app.use("/api/v1/users", UserRoutes);
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 //Start Server
 const PORT = process.env.PORT || 5555;

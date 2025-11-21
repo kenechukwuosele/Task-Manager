@@ -1,44 +1,152 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap");
 @import "tailwindcss";
 
 @theme {
-  --font-display: "Roboto", "sans-serif";
+  --font-display: "Outfit", "sans-serif";
+  --font-body: "Inter", "sans-serif";
   --breakpoint-3xl: 1920px;
-  --color-primary: #1368ec;
+  
+  /* Premium Light Mode Palette */
+  --color-primary: #6366f1; /* Indigo 500 */
+  --color-primary-hover: #4f46e5; /* Indigo 600 */
+  --color-secondary: #ec4899; /* Pink 500 */
+  --color-accent: #8b5cf6; /* Violet 500 */
+  
+  --color-bg-light: #f8fafc; /* Slate 50 */
+  --color-surface-light: #ffffff;
+  
+  --color-text-main: #1e293b; /* Slate 800 */
+  --color-text-secondary: #64748b; /* Slate 500 */
+  --color-border: #e2e8f0; /* Slate 200 */
 }
 
 @layer base {
   html {
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
+    color: var(--color-text-main);
   }
 
   body {
-    background-color: #fcfbfc;
+    background-color: var(--color-bg-light);
+    color: var(--color-text-secondary);
     overflow-x: hidden;
   }
 
-  .input-box {
-    @apply w-full flex justify-between gap-3 text-sm text-black 
-           bg-slate-100/50 rounded px-4 py-3 mb-4 mt-3 
-           border border-slate-200 outline-none;
+  /* Scrollbar Styling */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
   }
 
-  @keyframes gradient {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-slate-300 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-slate-400;
   }
 }
 
 @layer components {
+  /* Glassmorphism Utilities - Light Mode Optimized */
+  .glass {
+    @apply bg-white/80 backdrop-blur-xl border border-white/40 shadow-sm;
+  }
+
+  .glass-card {
+    @apply bg-white/90 backdrop-blur-md border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-2xl transition-all duration-300;
+  }
+
+  .glass-card:hover {
+    @apply shadow-[0_8px_30px_rgb(0,0,0,0.08)] transform -translate-y-1 border-indigo-100;
+  }
+
+  /* Cards */
   .card {
     @apply relative p-6 rounded-2xl bg-white 
-           shadow-lg hover:shadow-2xl 
-           transition-all duration-300;
-    position: relative;
+            shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] 
+            transition-all duration-300 
+            border border-slate-100;
     overflow: hidden;
   }
 
-  .card-btn {
-    @apply flex items-center gap-3 text-[12px] font-medium text-gray-700 hover:text-primary bg-gray-50 hover:bg-blue-50 px-4 py-1.5 rounded-lg border border-gray-200/50 cursor-pointer  
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .card:hover::before {
+    opacity: 1;
+  }
+
+  /* Inputs */
+  .input-group {
+    @apply relative mb-4;
+  }
+
+  .input-field {
+    @apply w-full bg-white text-slate-900
+           border border-slate-200 rounded-xl px-4 py-3
+           outline-none transition-all duration-200
+           focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm;
+  }
+  
+  .input-label {
+    @apply absolute left-4 top-3 text-slate-400 text-sm transition-all duration-200 pointer-events-none;
+  }
+
+  .input-field:focus ~ .input-label,
+  .input-field:not(:placeholder-shown) ~ .input-label {
+    @apply -top-2.5 left-3 bg-white px-1 text-xs text-primary font-medium;
+  }
+
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-medium transition-all duration-200 active:scale-95;
+  }
+
+  .btn-primary {
+    @apply bg-gradient-to-r from-indigo-500 to-violet-600 hover:from-indigo-600 hover:to-violet-700 
+           text-white shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/40;
+  }
+
+  .btn-secondary {
+    @apply bg-white text-slate-700 
+           border border-slate-200 hover:bg-slate-50 shadow-sm hover:shadow-md;
+  }
+  
+  .btn-ghost {
+    @apply text-slate-600 hover:bg-slate-100;
+  }
+  
+  .text-muted {
+    @apply text-slate-500;
+  }
+
+  /* Animations */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
   }
 }

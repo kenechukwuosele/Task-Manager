@@ -6,7 +6,7 @@ import Input from "../../components/Inputs/Input";
 import ProfilePhotoSelector from "../../components/Inputs/ProfilePhotoSelector";
 import MotionButton from "../../components/MotionButton";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-hot-toast";
+import { toast } from "react-toastify";
 
 const SignUp = () => {
   const [profilePic, setProfilePic] = useState(null);
@@ -59,11 +59,11 @@ const SignUp = () => {
   return (
     <AuthLayout>
       <div className="flex justify-center items-center mt-10 md:mt-0 px-4">
-        <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8 space-y-6">
-          <h1 className="text-3xl font-bold text-center text-gray-800">
+        <div className="w-full max-w-md glass-card p-8 space-y-6">
+          <h1 className="text-3xl font-bold text-center text-slate-800 tracking-tight">
             Create Your Account
           </h1>
-          <p className="text-center text-sm text-gray-500">
+          <p className="text-center text-sm text-slate-500">
             Join Task Manager today and manage your tasks efficiently
           </p>
 
@@ -71,7 +71,7 @@ const SignUp = () => {
             <ProfilePhotoSelector image={profilePic} setImage={setProfilePic} />
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-slate-700 mb-1">
                 Full Name
               </label>
               <Input
@@ -84,7 +84,7 @@ const SignUp = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-slate-700 mb-1">
                 Email Address
               </label>
               <Input
@@ -97,7 +97,7 @@ const SignUp = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-slate-700 mb-1">
                 Password
               </label>
               <Input
@@ -110,7 +110,7 @@ const SignUp = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-slate-700 mb-1">
                 Admin Invite Token
               </label>
               <Input
@@ -123,16 +123,16 @@ const SignUp = () => {
             <MotionButton
               type="submit"
               disabled={loading}
-              className="w-full bg-teal-600 hover:bg-teal-700 text-white py-3 rounded-xl font-semibold transition-all duration-300 mt-2"
+              className="btn-primary w-full py-3 rounded-xl font-semibold mt-2"
             >
               {loading ? "Creating Account..." : "Sign Up"}
             </MotionButton>
 
-            <p className="mt-4 text-center text-sm text-gray-500">
+            <p className="mt-4 text-center text-sm text-slate-500">
               Already have an account?{" "}
               <span
                 onClick={() => navigate("/login")}
-                className="text-blue-600 hover:underline cursor-pointer"
+                className="text-primary hover:text-primary-hover font-medium cursor-pointer transition-colors"
               >
                 Login
               </span>

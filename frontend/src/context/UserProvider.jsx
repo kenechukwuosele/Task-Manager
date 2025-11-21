@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import axiosInstance from "../utils/axiosinstance";
 import { API_PATHS } from "../utils/apiPaths";
 import { UserContext } from "./userContext";
+import { toast } from "react-toastify";
 
-// UserProvider component
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
     const stored = localStorage.getItem("user");
@@ -11,7 +11,7 @@ export const UserProvider = ({ children }) => {
   });
 
   const [accessToken, setAccessToken] = useState(() => {
-    return localStorage.getItem("token") || null;
+    return localStorage.getItem("accessToken") || null;
   });
 
   const updateUser = (data) => {
@@ -27,7 +27,7 @@ export const UserProvider = ({ children }) => {
 
     if (data.token) {
       setAccessToken(data.token);
-      localStorage.setItem("token", data.token);
+      localStorage.setItem("accessToken", data.token);
     }
 
     localStorage.setItem("user", JSON.stringify(normalizedUser));
@@ -41,12 +41,15 @@ export const UserProvider = ({ children }) => {
         { withCredentials: true }
       );
     } catch (err) {
-      toast.error("Logout failed:", err);
+      toast.error(
+        `Logout failed: ${err.response?.data?.message || err.message}`
+      );
     } finally {
       setUser(null);
       setAccessToken(null);
       localStorage.removeItem("user");
-      localStorage.removeItem("token");
+      localStorage.removeItem("accessToken");
+      // 🚫 Don't navigate here
     }
   };
 

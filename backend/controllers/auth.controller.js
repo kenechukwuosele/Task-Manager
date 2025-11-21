@@ -6,12 +6,21 @@ const { generateTokenandSetCookie } = require("../utils/generateTokenandSetCooki
 
 const queue = new PQueue({ concurrency: 1 });
 
+// Helper function to get the base URL
+const getBaseUrl = (req) => `${req.protocol}://${req.get('host')}`;
+
 // REGISTER USER
 const registerUser = async (req, res) => {
   await queue.add(async () => {
     try {
       const { name, email, password, adminInviteToken } = req.body;
-      const profileImageUrl = req.file?.path || null;
+      let profileImageUrl = null;
+
+      if (req.file) {
+        // Use only the filename and construct a web-accessible URL
+        const filename = req.file.filename || req.file.originalname; // Adjust based on Multer config
+        profileImageUrl = `${getBaseUrl(req)}/uploads/${filename}`;
+      }
 
       if (!name || !email || !password)
         return res.status(400).json({ message: "Name, email, and password required" });
@@ -99,18 +108,33 @@ const updateUserProfile = async (req, res) => {
       const user = await User.findById(req.user._id);
       if (!user) return res.status(404).json({ message: "User not found" });
 
-      user.name = req.body.name || user.name;
-      user.email = req.body.email || user.email;
-      if (req.body.password) user.password = await bcrypt.hash(req.body.password, 10);
-      if (req.file?.path) user.profileImageUrl = req.file.path;
+      const { name, email, password } = req.body;
+
+      // Check if email is being changed and if it's already taken
+      if (email && email !== user.email) {
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+          return res.status(400).json({ message: "Email is already in use" });
+        }
+        user.email = email;
+      }
+
+      if (name) user.name = name;
+      if (password) user.password = await bcrypt.hash(password, 10);
+
+      if (req.file) {
+        // Update profileImageUrl with new web-accessible URL
+        const filename = req.file.filename || req.file.originalname; // Adjust based on Multer config
+        user.profileImageUrl = `${getBaseUrl(req)}/uploads/${filename}`;
+      }
 
       const updatedUser = await user.save();
       const accessToken = generateTokenandSetCookie(updatedUser._id, res);
 
       res.json({ ...updatedUser._doc, token: accessToken });
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "Server error" });
+      console.error("Profile update error:", error);
+      res.status(500).json({ message: "Server error", error: error.message });
     }
   });
 };

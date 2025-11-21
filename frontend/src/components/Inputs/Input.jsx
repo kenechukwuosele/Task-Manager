@@ -9,39 +9,26 @@ const Input = ({ value, onChange, label, placeholder, type }) => {
         setShowPassword(!showPassword);
     }
   return (
-    <div>
-      <label className="text-[13px] text-slate-800">{label}</label>
 
-      <div className="input-box">
-        <input
-          type={
-            type == "password" ? (showPassword ? "text" : "password") : type
-          }
-          placeholder={placeholder}
-          aria-label={label}
-          value={value}
-          onChange={(e) => onChange(e)}
-          className="w-full bg-transparent outline-none"
-        />
+    <div className="input-group">
+      <input
+        type={type === "password" ? (showPassword ? "text" : "password") : type}
+        placeholder=" "
+        className="input-field"
+        value={value}
+        onChange={onChange}
+      />
+      <label className="input-label">{label}</label>
 
-        {type === "password" && (
-            <>
-                {showPassword ? (
-                    <FaRegEye
-                     size={22}
-                     className="text-primary cursor-pointer"
-                     onClick={togglePasswordVisibility}
-                     />
-                ) : (
-                    <FaRegEyeSlash
-                     size={22}
-                     className="text-slate-400 cursor-pointer"
-                     onClick={togglePasswordVisibility}
-                     />
-                )}
-            </>
-        )}
-      </div>
+      {type === "password" && (
+        <div className="absolute right-4 top-3.5 cursor-pointer text-slate-400 hover:text-primary transition-colors">
+          {showPassword ? (
+            <FaRegEye size={20} onClick={togglePasswordVisibility} />
+          ) : (
+            <FaRegEyeSlash size={20} onClick={togglePasswordVisibility} />
+          )}
+        </div>
+      )}
     </div>
   );
 };

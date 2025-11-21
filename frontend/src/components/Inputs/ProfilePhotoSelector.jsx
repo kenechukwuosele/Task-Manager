@@ -1,26 +1,27 @@
 import React, { useRef, useEffect, useState } from "react";
+import { LuUser, LuCamera } from "react-icons/lu";
 
-const ProfilePhotoSelector = ({ image, setImage }) => {
+const ProfilePhotoSelector = ({ image, setImage, currentImage }) => {
   const inputRef = useRef(null);
   const [preview, setPreview] = useState(null);
 
   // Update preview whenever `image` changes
   useEffect(() => {
-    if (!image) {
+    if (image) {
+      const objectUrl = URL.createObjectURL(image);
+      setPreview(objectUrl);
+      // Cleanup the old object URL when component unmounts or image changes
+      return () => URL.revokeObjectURL(objectUrl);
+    } else if (currentImage) {
+      setPreview(currentImage);
+    } else {
       setPreview(null);
-      return;
     }
-
-    const objectUrl = URL.createObjectURL(image);
-    setPreview(objectUrl);
-
-    // Cleanup the old object URL when component unmounts or image changes
-    return () => URL.revokeObjectURL(objectUrl);
-  }, [image]);
+  }, [image, currentImage]);
 
   const onChooseFile = () => {
     if (inputRef.current) {
-      inputRef.current.click(); // Correct usage
+      inputRef.current.click();
     }
   };
 
@@ -31,9 +32,9 @@ const ProfilePhotoSelector = ({ image, setImage }) => {
   };
 
   return (
-    <div className="flex flex-col items-center mb-4">
+    <div className="flex flex-col items-center mb-4 group">
       <div
-        className="w-24 h-24 rounded-full border border-gray-300 flex items-center justify-center cursor-pointer overflow-hidden"
+        className="w-28 h-28 rounded-full border-4 border-white shadow-lg flex items-center justify-center cursor-pointer overflow-hidden bg-slate-100 relative transition-transform hover:scale-105"
         onClick={onChooseFile}
       >
         {preview ? (
@@ -43,8 +44,13 @@ const ProfilePhotoSelector = ({ image, setImage }) => {
             className="w-full h-full object-cover"
           />
         ) : (
-          <span className="text-gray-400">Upload</span> // Keep your icon here if needed
+          <LuUser className="text-slate-400 w-12 h-12" />
         )}
+
+        {/* Overlay on hover */}
+        <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+          <LuCamera className="text-white w-8 h-8" />
+        </div>
       </div>
       <input
         type="file"

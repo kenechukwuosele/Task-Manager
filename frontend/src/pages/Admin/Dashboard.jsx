@@ -12,7 +12,6 @@ import { LuArrowRight } from "react-icons/lu";
 import TaskListTable from "../../components/TaskListTable";
 import CustomPieChart from "../../components/Charts/CustomPieChart";
 import CustomBarChart from "../../components/Charts/CustomBarChart";
-import { BarChart } from "recharts";
 
 const COLORS = ["#BD51FF", "#00B8DB", "#7BCE00"];
 
@@ -63,7 +62,7 @@ const Dashboard = () => {
   };
 
   const onSeeMore = () => {
-    navigate(user?.role === "admin" ? "/admin/tasks" : "/tasks");
+    navigate(user?.role === "admin" ? "/admin/manage-tasks" : "/user/my-tasks");
   };
 
   useEffect(() => {
@@ -111,10 +110,10 @@ const Dashboard = () => {
 
   return (
     <DashboardLayout>
-      <div className="card my-5">
+      <div className="card my-5 border-none shadow-sm bg-white/50 backdrop-blur-sm">
         <div>
           <div className="col-span-3">
-            <h1 className="text-2xl md:text-3xl font-bold">
+            <h1 className="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">
               Good{" "}
               <span
                 className={`${gradient} bg-clip-text text-transparent bg-[length:200%_200%]`}
@@ -124,7 +123,7 @@ const Dashboard = () => {
               </span>{" "}
               {user?.name}
             </h1>
-            <p className="text-xs md:text-[13px] text-gray-400 mt-1.5">
+            <p className="text-xs md:text-[13px] text-slate-500 mt-1.5 font-medium">
               {moment().format("dddd Do MMMM YYYY")}
             </p>
           </div>
@@ -166,18 +165,22 @@ const Dashboard = () => {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-4 md:my-6">
         <div>
-          <div className="card">
-            <div className="flex items-center justify-between">
-              <h5 className="font-medium">Task Distribution</h5>
+          <div className="card h-full">
+            <div className="flex items-center justify-between mb-4">
+              <h5 className="font-bold text-slate-800 text-lg">
+                Task Distribution
+              </h5>
             </div>
             <CustomPieChart data={pieChartData} colors={COLORS} />
           </div>
         </div>
 
         <div>
-          <div className="card">
-            <div className="flex items-center justify-between">
-              <h5 className="font-medium">Task Priority Levels</h5>
+          <div className="card h-full">
+            <div className="flex items-center justify-between mb-4">
+              <h5 className="font-bold text-slate-800 text-lg">
+                Task Priority Levels
+              </h5>
             </div>
             <CustomBarChart data={barChartData} />
           </div>
@@ -185,9 +188,12 @@ const Dashboard = () => {
 
         <div className="md:col-span-2">
           <div className="card">
-            <div className="flex items-center justify-between">
-              <h5 className="text-lg">Recent Tasks</h5>
-              <button className="card-btn" onClick={onSeeMore}>
+            <div className="flex items-center justify-between mb-4">
+              <h5 className="text-lg font-bold text-slate-800">Recent Tasks</h5>
+              <button
+                className="text-sm font-medium text-primary hover:text-primary-hover flex items-center gap-1 transition-colors"
+                onClick={onSeeMore}
+              >
                 See All <LuArrowRight className="text-base" />
               </button>
             </div>

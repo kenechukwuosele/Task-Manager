@@ -19,7 +19,7 @@ const getTasks = async (req, res) => {
     let tasks = await Task.find(queryFilter)
       .populate("assignedTo", "name email profileImageUrl")
       .populate("createdBy", "name email")
-      .lean(); // 🔥 returns plain JS objects
+      .lean(); // returns plain JS objects
 
     // 3) Add completed checklist count
     tasks = tasks.map((t) => {
@@ -237,7 +237,7 @@ const updateTaskStatus = async (req, res) => {
     // Admins can update any task, users can only update their own
     if (
       req.user.role !== "admin" &&
-      String(task.assignedTo) !== String(req.user._id) &&
+      !task.assignedTo.includes(req.user._id) &&
       String(task.createdBy) !== String(req.user._id)
     ) {
       return res
@@ -277,7 +277,7 @@ const updateTaskCheckList = async (req, res) => {
     // Admins can update any task, users can only update their own
     if (
       req.user.role !== "admin" &&
-      String(task.assignedTo) !== String(req.user._id)
+      !task.assignedTo.includes(req.user._id)
     ) {
       return res
         .status(403)

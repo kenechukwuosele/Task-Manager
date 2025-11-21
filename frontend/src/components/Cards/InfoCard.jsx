@@ -2,21 +2,18 @@ import React from "react";
 
 const InfoCard = ({ icon, label, value, color }) => {
   return (
-    <div>
-      <div className="flex items-center gap-3">
-        {/* Colored circle */}
-        <div className={`w-2 md:w-2 h-3 md:h-5 ${color} rounded-full`} />
-
-        {/* Optional icon */}
-        {icon && <span className="text-lg">{icon}</span>}
+    <div className="glass-card p-5 hover:-translate-y-1 border border-slate-100">
+      <div className="flex items-center gap-4">
+        {/* Colored icon background */}
+        <div className={`p-3 rounded-xl ${color} text-white shadow-md`}>
+          {icon && <span className="text-xl">{icon}</span>}
+        </div>
 
         {/* Text content */}
-        <p className="text-xs md:text-[14px] text-gray-500">
-          <span className="text-sm md:text-[15px] text-black font-semibold">
-            {value}
-          </span>{" "}
-          {label}
-        </p>
+        <div>
+          <p className="text-2xl font-bold text-slate-800 tracking-tight">{value}</p>
+          <p className="text-sm text-slate-500 font-medium">{label}</p>
+        </div>
       </div>
     </div>
   );

@@ -3,19 +3,22 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "../pages/auth/Login.jsx";
 import SignUp from "../pages/auth/SignUp.jsx";
 import Unauthorized from "../pages/unauthorized.jsx";
-import Dashboard from "../pages/admin/Dashboard";
-import CreateTask from "../pages/admin/CreateTask";
-import ManageTasks from "../pages/admin/ManageTasks";
-import ManageUsers from "../pages/admin/ManageUsers";
-import UserDashboard from "../pages/user/UserDashboard";
-import MyTasks from "../pages/user/MyTasks";
-import ViewTaskDetails from "../pages/user/ViewTaskDetails";
+import Dashboard from "../pages/Admin/Dashboard";
+import CreateTask from "../pages/Admin/CreateTask.jsx";
+import ManageTasks from "../pages/Admin/ManageTasks";
+import ManageUsers from "../pages/Admin/ManageUsers";
+import Reports from "../pages/Admin/Reports";
+import UserDashboard from "../pages/User/UserDashboard";
+import MyTasks from "../pages/User/MyTasks";
+import ViewTaskDetails from "../pages/User/ViewTaskDetails";
+import ProfileSettings from "../pages/ProfileSettings";
 import PrivateRoute from "../routes/PrivateRoute";
+import { Toaster } from "react-hot-toast";
 
 const AppRoutes = () => {
-  console.log("AppRoutes loaded");
+  console.log("AppRoutes loaded"); 
   return (
-    
+    <div>
       <Routes>
         {/* Default redirect */}
         <Route path="/" element={<Navigate to="/login" replace />} />
@@ -33,6 +36,8 @@ const AppRoutes = () => {
           <Route path="/admin/create-task" element={<CreateTask />} />
           <Route path="/admin/manage-tasks" element={<ManageTasks />} />
           <Route path="/admin/manage-users" element={<ManageUsers />} />
+          <Route path="/admin/reports" element={<Reports />} />
+          <Route path="/admin/profile-settings" element={<ProfileSettings />} />
         </Route>
 
         {/* User Routes */}
@@ -40,12 +45,16 @@ const AppRoutes = () => {
           <Route path="/user/dashboard" element={<UserDashboard />} />
           <Route path="/user/my-tasks" element={<MyTasks />} />
           <Route path="/user/view-task-details/:id" element={<ViewTaskDetails />} />
+          <Route path="/user/profile-settings" element={<ProfileSettings />} />
         </Route>
 
         {/* Catch-all → redirect to login */}
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
-  
+      </div>
+      
+
+
   );
 };
 

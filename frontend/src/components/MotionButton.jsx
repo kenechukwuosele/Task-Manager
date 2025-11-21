@@ -16,7 +16,7 @@ export default function MotionButton({
       whileHover={whileHover}
       whileTap={whileTap}
       transition={transition}
-      className={className}
+      className={`btn ${className}`}
       {...rest}
     >
       {children}

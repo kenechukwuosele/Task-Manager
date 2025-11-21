@@ -7,7 +7,7 @@ import LoginLayout from "../../components/Layouts/LoginLayout.jsx";
 import axiosInstance from "../../utils/axiosinstance.js";
 import { API_PATHS } from "../../utils/apiPaths.js";
 import { UserContext } from "../../context/userContext.jsx";
-import { toast } from "react-hot-toast";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -43,8 +43,9 @@ const Login = () => {
       );
 
       // Save access token + user info
-      const { token, role, name, email: userEmail, _id } = response.data;
-      updateUser({ token, role, name, email: userEmail, _id });
+      const { token, role, name, email: userEmail, _id, profileImageUrl } = response.data;
+      localStorage.setItem("accessToken", token);
+      updateUser({ token, role, name, email: userEmail, _id, profileImageUrl });
 
       toast.success("Login successful!");
 
@@ -62,13 +63,13 @@ const Login = () => {
   return (
     <LoginLayout>
       <div className="lg:w-[70%] h-3/4 md:h-full flex flex-col justify-center">
-        <h3 className="text-xl font-semibold text-black">
-          <p className="text-3xl text-slate-700 mt-[5px] mb-6">Login</p>
+        <h3 className="text-xl font-semibold text-slate-900">
+          <p className="text-3xl text-slate-800 mt-[5px] mb-6 font-bold tracking-tight">Welcome Back</p>
         </h3>
 
         <form onSubmit={handleLogin} className="space-y-5">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-slate-700 mb-1">
               Email address
             </label>
             <Input
@@ -81,7 +82,7 @@ const Login = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-slate-700 mb-1">
               Password
             </label>
             <Input
@@ -96,16 +97,16 @@ const Login = () => {
           <MotionButton
             type="submit"
             disabled={loading}
-            className="w-full bg-teal-600 hover:bg-teal-700 text-white py-2 rounded-lg font-semibold transition-colors duration-300"
+            className="btn-primary w-full py-3 rounded-xl font-semibold shadow-lg shadow-indigo-500/20"
           >
             {loading ? "Logging in..." : "Login"}
           </MotionButton>
 
-          <p className="mt-6 text-center text-sm text-gray-500">
+          <p className="mt-6 text-center text-sm text-slate-500">
             Don’t have an account?{" "}
             <span
               onClick={() => navigate("/signup")}
-              className="text-blue-600 hover:underline cursor-pointer"
+              className="text-primary hover:text-primary-hover font-medium cursor-pointer transition-colors"
             >
               Sign Up
             </span>
