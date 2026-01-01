@@ -1,4 +1,17 @@
-import React, { useState, useContext, useRef, useEffect } from "react";
+import UserAvatar from "../UserAvatar"; // Add this to imports
+
+// ... (in render)
+<button
+  onClick={() => setOpenProfileMenu(!openProfileMenu)}
+  className="flex items-center gap-3 hover:bg-slate-100 rounded-full p-1 pr-3 transition-all duration-200 border border-transparent hover:border-slate-200"
+>
+  <UserAvatar
+    user={user}
+    size={36}
+    className="border-2 border-white shadow-sm"
+  />
+  <LuSettings className="w-5 h-5 text-slate-600" />
+</button>;
 import { HiOutlineMenu, HiOutlineX } from "react-icons/hi";
 import { LuSettings, LuUser, LuLogOut } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
@@ -21,12 +34,15 @@ const NavBar = () => {
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const handleProfileClick = () => {
-    const profilePath = user?.role === "admin" ? "/admin/profile-settings" : "/user/profile-settings";
+    const profilePath =
+      user?.role === "admin"
+        ? "/admin/profile-settings"
+        : "/user/profile-settings";
     navigate(profilePath);
     setOpenProfileMenu(false);
   };
@@ -53,7 +69,9 @@ const NavBar = () => {
             )}
           </button>
 
-          <h2 className="text-xl font-bold text-slate-800 tracking-tight">Task Manager</h2>
+          <h2 className="text-xl font-bold text-slate-800 tracking-tight">
+            Task Manager
+          </h2>
         </div>
 
         {/* User Profile Section */}
@@ -81,10 +99,14 @@ const NavBar = () => {
               {openProfileMenu && (
                 <div className="absolute right-0 mt-3 w-56 glass-card py-2 z-50 animate-fade-in origin-top-right">
                   <div className="px-5 py-3 border-b border-slate-100">
-                    <p className="text-sm font-semibold text-slate-900">{user.name}</p>
-                    <p className="text-xs text-slate-500 truncate">{user.email}</p>
+                    <p className="text-sm font-semibold text-slate-900">
+                      {user.name}
+                    </p>
+                    <p className="text-xs text-slate-500 truncate">
+                      {user.email}
+                    </p>
                   </div>
-  
+
                   <div className="p-2">
                     <button
                       onClick={handleProfileClick}
@@ -93,7 +115,7 @@ const NavBar = () => {
                       <LuUser className="w-4 h-4" />
                       Profile Settings
                     </button>
-    
+
                     <button
                       onClick={handleLogout}
                       className="flex items-center gap-3 w-full px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-200"
@@ -105,7 +127,6 @@ const NavBar = () => {
                 </div>
               )}
             </div>
-
           )}
         </div>
       </div>

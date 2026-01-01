@@ -1,4 +1,14 @@
-import React, { useContext, useState, useEffect } from "react";
+import UserAvatar from "../UserAvatar"; // Add this to imports
+
+// ...
+      <div className="flex flex-col items-center justify-center mb-8 px-4">
+        <div className="relative group cursor-pointer">
+          <UserAvatar 
+            user={user} 
+            size={80} 
+            className="border-4 border-slate-100 shadow-lg transition-transform duration-300 group-hover:scale-105" 
+          />
+        </div>
 import { useNavigate, useLocation } from "react-router-dom";
 import { SIDE_MENU_DATA, SIDE_MENU_USER_DATA } from "../../utils/data";
 import { UserContext } from "../../context/userContext.jsx";

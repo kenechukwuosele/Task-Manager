@@ -1,8 +1,21 @@
-import React from "react";
-import moment from "moment";
+import AvatarGroup from "./AvatarGroup"; // Add import
 
-const TaskListTable = ({ tableData = [] }) => {
-  const getStatusBadgeColor = (status) => {
+// ... inside matching loop
+                <td className="py-4 px-4 text-slate-700 text-sm font-medium truncate max-w-[200px]">
+                  {task.title}
+                </td>
+
+                <td className="py-4 px-4">
+                    {/* Render team members or single assignee */}
+                    {task.team && task.team.length > 0 ? (
+                        <AvatarGroup users={task.team} maxVisible={3} />
+                    ) : (
+                        <span className="text-xs text-slate-400">Unassigned</span>
+                    )}
+                </td>
+
+                <td className="py-4 px-4">
+// ...
     const s = String(status || "")
       .trim()
       .toLowerCase();
@@ -42,6 +55,9 @@ const TaskListTable = ({ tableData = [] }) => {
           <tr>
             <th className="py-4 px-4 text-left text-slate-700 font-semibold text-sm">
               Name
+            </th>
+            <th className="py-4 px-4 text-left text-slate-700 font-semibold text-sm">
+              Team
             </th>
             <th className="py-4 px-4 text-left text-slate-700 font-semibold text-sm">
               Status
