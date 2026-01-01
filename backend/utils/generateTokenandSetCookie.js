@@ -12,14 +12,18 @@ const generateTokenandSetCookie = (userId, res) => {
   });
 
   // 2️⃣ Refresh Token — long-lived, stored in httpOnly cookie
-  const refreshToken = jwt.sign({ id: userId }, process.env.JWT_REFRESH_SECRET, {
-    expiresIn: "7d", // 7 days
-  });
+  const refreshToken = jwt.sign(
+    { id: userId },
+    process.env.JWT_REFRESH_SECRET,
+    {
+      expiresIn: "7d", // 7 days
+    }
+  );
 
   res.cookie("refreshAccessToken", refreshToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
   });
 
